@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from .auth import router as auth_router
-from .pubsub import router as pubsub_router
-from .agent import router as agent_router
-from .gmail_service import router as gmail_router
-from .db import init_supabase
+from backend.app.auth import router as auth_router
+from backend.app.pubsub import router as pubsub_router
+from backend.app.agent import router as agent_router
+from backend.app.gmail_service import router as gmail_router
+from backend.app.db import init_supabase
 
 app = FastAPI(title="AI Email Agent", version="1.0.0")
 
