@@ -6,7 +6,9 @@ import sys
 from celery import Celery
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+from dotenv import load_dotenv
+load_dotenv()
+import ssl
 from app.agent import generate_ai_response
 from app.schemas import EmailRequest
 from app.db import get_supabase, get_user_automation_settings
@@ -14,11 +16,19 @@ from app.db import get_supabase, get_user_automation_settings
 # Redis configuration
 REDIS_URL = os.getenv("REDIS_URL", "rediss://:AbREAAIjcDE4YzdkM2E5M2I1ZWQ0NGFiOTRmNGIwODE1ZWU2NzgxMnAxMA@wondrous-mite-46148.upstash.io:6379")
 
+
+ssl_options = {
+    "ssl_cert_reqs": ssl.CERT_NONE,  # ⚠️ Only for testing
+}
+
+
 # Celery configuration
 celery = Celery(
     'ai_worker',
     broker=REDIS_URL,
-    backend=REDIS_URL
+    backend=REDIS_URL,
+    broker_use_ssl=ssl_options,
+    redis_backend_use_ssl=ssl_options,
 )
 
 celery.conf.update(
