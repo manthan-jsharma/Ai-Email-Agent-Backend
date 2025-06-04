@@ -122,8 +122,8 @@ from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 import os
 import json
-from .schemas import AuthResponse, TokenRequest
-from .db import save_user_credentials, get_user_credentials
+from backend.app.schemas import AuthResponse, TokenRequest
+from backend.app.db import save_user_credentials, get_user_credentials
 from fastapi.responses import RedirectResponse
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
