@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  fastapi:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=rediss://:AbREAAIjcDE4YzdkM2E5M2I1ZWQ0NGFiOTRmNGIwODE1ZWU2NzgxMnAxMA@wondrous-mite-46148.upstash.io:6379
+    depends_on:
+      - celery
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+  celery:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.celery
+    environment:
+      - REDIS_URL=rediss://:AbREAAIjcDE4YzdkM2E5M2I1ZWQ0NGFiOTRmNGIwODE1ZWU2NzgxMnAxMA@wondrous-mite-46148.upstash.io:6379
