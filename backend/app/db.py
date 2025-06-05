@@ -230,7 +230,7 @@
 #             'updated_at': datetime.now().isoformat()
 #         }).execute()
 
-import asyncpg
+
 import json
 import os
 from datetime import datetime

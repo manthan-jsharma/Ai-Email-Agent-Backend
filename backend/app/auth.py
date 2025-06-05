@@ -146,7 +146,7 @@ CLIENT_CONFIG = {
         "client_secret": os.getenv("GOOGLE_CLIENT_SECRET", "mock_client_secret"),
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
-        "redirect_uris": ["http://localhost:8000/auth/callback"]
+        "redirect_uris": ["https://ai-email-agent-backend-fast-api.onrender.com/auth/callback"]
     }
 }
 SECRET_KEY = os.getenv("JWT_SECRET", "dev_secret")
@@ -173,7 +173,7 @@ async def login():
     flow = Flow.from_client_config(
         CLIENT_CONFIG,
         scopes=SCOPES,
-        redirect_uri="http://localhost:8000/auth/callback"
+        redirect_uri="https://ai-email-agent-backend-fast-api.onrender.com/auth/callback"
     )
     
     authorization_url, state = flow.authorization_url(
@@ -192,7 +192,7 @@ async def auth_callback(code: str, state: str):
         flow = Flow.from_client_config(
             CLIENT_CONFIG,
             scopes=SCOPES,
-            redirect_uri="http://localhost:8000/auth/callback"
+            redirect_uri="https://ai-email-agent-backend-fast-api.onrender.com/auth/callback"
         )
         
         flow.fetch_token(code=code)
@@ -226,7 +226,7 @@ async def auth_callback(code: str, state: str):
         # ✅ Trigger your own POST /setup-watch route (backend calling itself)
         async with httpx.AsyncClient() as client:
             resp = await client.post(
-                "http://localhost:8000/pubsub/setup-watch",
+                "https://ai-email-agent-backend-fast-api.onrender.com/pubsub/setup-watch",
                 json={"user_email": profile['emailAddress']}
             )
             print("📡 Triggered /setup-watch, status:", resp.status_code)
@@ -235,7 +235,7 @@ async def auth_callback(code: str, state: str):
         token = create_jwt_token(profile['emailAddress'])
         
         # Redirect to frontend after successful authentication
-        return  RedirectResponse(url=f"http://localhost:3000/dashboard?token={token}")
+        return  RedirectResponse(url=f"https://ai-agent-frontend-utvo.vercel.app/dashboard?token={token}")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 @router.post("/refresh")
