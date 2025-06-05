@@ -130,7 +130,7 @@ from datetime import datetime, timedelta
 # from app.gmail_service import setup_gmail_watch
 import httpx
 router = APIRouter()
-
+BASE_BACKEND_URL = os.getenv("BASE_BACKEND_URL", "http://localhost:8000")
 # OAuth 2.0 configuration
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.readonly',
@@ -146,7 +146,7 @@ CLIENT_CONFIG = {
         "client_secret": os.getenv("GOOGLE_CLIENT_SECRET", "mock_client_secret"),
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
-        "redirect_uris": ["https://ai-email-agent-backend-fast-api.onrender.com/auth/callback"]
+        "redirect_uris": [f"{BASE_BACKEND_URL}/auth/callback"]
     }
 }
 SECRET_KEY = os.getenv("JWT_SECRET", "dev_secret")
@@ -173,7 +173,7 @@ async def login():
     flow = Flow.from_client_config(
         CLIENT_CONFIG,
         scopes=SCOPES,
-        redirect_uri="https://ai-email-agent-backend-fast-api.onrender.com/auth/callback"
+        redirect_uri=f"{BASE_BACKEND_URL}/auth/callback"
     )
     
     authorization_url, state = flow.authorization_url(
@@ -192,7 +192,7 @@ async def auth_callback(code: str, state: str):
         flow = Flow.from_client_config(
             CLIENT_CONFIG,
             scopes=SCOPES,
-            redirect_uri="https://ai-email-agent-backend-fast-api.onrender.com/auth/callback"
+            redirect_uri=f"{BASE_BACKEND_URL}/auth/callback"
         )
         
         flow.fetch_token(code=code)
@@ -226,7 +226,7 @@ async def auth_callback(code: str, state: str):
         # ✅ Trigger your own POST /setup-watch route (backend calling itself)
         async with httpx.AsyncClient() as client:
             resp = await client.post(
-                "https://ai-email-agent-backend-fast-api.onrender.com/pubsub/setup-watch",
+                f"{BASE_BACKEND_URL}/pubsub/setup-watch",
                 json={"user_email": profile['emailAddress']}
             )
             print("📡 Triggered /setup-watch, status:", resp.status_code)
