@@ -12,7 +12,9 @@ app = FastAPI(title="AI Email Agent", version="1.0.0")
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ai-agent-frontend-utvo-gjfyo6nsh-manthanjsharmas-projects.vercel.app"],
+    allow_origins=["https://ai-agent-frontend-utvo.vercel.app",
+    "https://ai-agent-frontend-utvo-manthanjsharmas-projects.vercel.app",
+    "https://ai-agent-frontend-utvo-git-main-manthanjsharmas-projects.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
